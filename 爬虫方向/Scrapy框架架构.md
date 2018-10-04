@@ -6,7 +6,11 @@
 这些工作如果每次都要自己从零开始写的话，比较浪费时间。
 
 因此Scrapy把一些基础的东西封装好了，在他上面写爬虫可以变的更加的高效（爬取效率和开发效率）。
-因此真正在公司里，一些上了量的爬虫，都是使用Scrapy框架来解决。
+因此真正在公司里，一些上了量的爬虫，都是使用 Scrapy 框架来解决。
+
+异步：*调用*在发出之后，这个调用就直接返回，不管有无结果。
+非阻塞：关注的是程序在等待调用结果时的*状态*，指在不能立刻得到结果之前，调用不会阻塞当前线程。
+Scrapy 使用了Twisted 异步网络框架，使用 request 模块慢的主要原因就是发送网络请求太慢，而网络请求还是不可控的。
 
 ## Scrapy框架模块功能：
 
@@ -56,13 +60,16 @@ pip install Scrapy
 如果在ubuntu上安装scrapy之前，需要先安装以下依赖：
 `sudo apt-get install python3-dev build-essential python3-pip libxml2-dev libxslt1-dev zlib1g-dev libffi-dev libssl-dev`，然后再通过 `pip install scrapy` 安装。
 
-## 创建项目
+## 创建项目与爬虫
 要使用Scrapy框架创建项目，需要通过命令来创建。(旧版本需要进入文件夹后初始化一个工程项目，新版本比如Scrapy 1.5.1，已经不需要进入文件夹下初始化了)
 
 然后使用以下命令创建：
 
 `scrapy startproject [项目名称]`
 scrapy startproject ScrapyDemo
+
+`scrapy genspider [爬虫文件名称] [限定的网站]`
+scrapy genspider zhiping "zhiping.com"
 
 ## 目录结构
 1. items.py：用来存放爬虫爬取下来数据的模型。
@@ -147,6 +154,23 @@ ITEM_PIPELINES = {
    'ScrapyDemo.pipelines.ScrapydemoPipeline': 300,  # 300是优先级，多个 pipelines 时值越小优先级越高
 }
 ```
+7. Scrapy提供5层 log 级别，
+```
+Scrapy提供5层 log 级别:
+CRITICAL - 严重错误(critical)
+ERROR - 一般错误(regular errors)
+WARNING - 警告信息(warning messages)
+INFO - 一般信息(informational messages)
+DEBUG - 调试信息(debugging messages)
+在setting.py中进行以下设置可以被用来配置logging:
+LOG_ENABLED 默认: True，启用logging
+LOG_ENCODING 默认: 'utf-8'，logging使用的编码
+LOG_FILE 默认: None，在当前目录里创建logging输出文件的文件名
+LOG_LEVEL 默认: 'DEBUG'，log的最低级别
+LOG_STDOUT 默认: False 如果为 True，进程所有的标准输出(及错误)将会被重定向到log中。
+例如，执行 print "hello" ，其将会在Scrapy log中显示
+```
+设置`LOG_LEVEL = "WARNING"`则不显示 log 级别低于 WARNING 的日志
 
 ## 运行scrapy项目
 运行scrapy项目。需要在终端，进入项目所在的路径，然后scrapy crawl [爬虫名字]即可运行指定的爬虫。如果不想每次都在命令行中运行，那么可以把这个命令写在一个文件中。
