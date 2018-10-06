@@ -10,7 +10,7 @@
 
 异步：*调用*在发出之后，这个调用就直接返回，不管有无结果。
 非阻塞：关注的是程序在等待调用结果时的*状态*，指在不能立刻得到结果之前，调用不会阻塞当前线程。
-Scrapy 使用了Twisted 异步网络框架，使用 request 模块慢的主要原因就是发送网络请求太慢，而网络请求还是不可控的。
+Scrapy 使用了Twisted 异步网络框架，使用 requests 模块慢的主要原因就是发送网络请求太慢，而网络请求还是不可控的。
 
 ## Scrapy框架模块功能：
 
@@ -135,6 +135,38 @@ DEFAULT_REQUEST_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
 }
 ```
+3. 设置`LOG_LEVEL = "WARNING"`则不显示 log 级别低于 WARNING 的日志
+`LOG_FILE = './log.log'`保存 log 日志到文件，终端不会显示日志内容。
+使用的时候需要import logging，实例化logger的方式可以在任何文件中使用logger输出内容
+
+```
+Scrapy提供5层 log 级别
+CRITICAL - 严重错误(critical)
+ERROR - 一般错误(regular errors)
+WARNING - 警告信息(warning messages)
+INFO - 一般信息(informational messages)
+DEBUG - 调试信息(debugging messages)
+
+在setting.py中进行以下设置可以被用来配置logging:
+LOG_ENABLED 默认: True，启用logging
+LOG_ENCODING 默认: 'utf-8'，logging使用的编码
+LOG_FILE 默认: None，在当前目录里创建logging输出文件的文件名
+LOG_LEVEL 默认: 'DEBUG'，log的最低级别
+LOG_STDOUT 默认: False 如果为 True，进程所有的标准输出(及错误)将会被重定向到log中。
+例如，执行 print "hello" ，其将会在Scrapy log中显示
+```
+
+## item.py 的使用
+定义需要的字段
+scrapy.Item 是一个字典
+scrapy.Field() 是一个占位符，也是一个字典 
+
+为什么scrapy 要定义一个字典：
+在获取数据的时候，使用不同的item 来存放不同的数据
+在把数据交给pipeline 的时候，可以通过isinstance(item, 类名)来判断数据是属于哪个item, 进行不同的数据(item)处理
+
+## 页面抽取技巧
+tr_list = response.xpath("//div")
 
 ## 笔记
 1. response 是一个`<class 'scrapy.http.response.html.HtmlResponse'>`对象，可以执行`xpath`和`css`语法来提取数据
@@ -145,35 +177,24 @@ DEFAULT_REQUEST_HEADERS = {
 6. pipline 是专门用来保存数据的，其中有三个方法最常用，要激活 pipelines，应该在settings.py文件中设置`ITEM_PIPELINES`
 ```
 def open_spider(self, spider): # 开始运行爬虫的时候执行代码
-def process_item(self, item, spider): # 当爬虫有item传过来的时候会被调用
+def process_item(self, item, spider): # 当爬虫有item传过来的时候会被调用，注意方法名不能修改为其他名称
+                                        这里的spider指的是传递 item 的那个爬虫，可以使用打印 spider.name 属性验证
 def closs_spider(self, spider): # 关闭爬虫的时候执行代码
 ```
 ```
 # 使用 pipelines 时需要配置 settings.py 文件开启 pipelines
 ITEM_PIPELINES = {
-   'ScrapyDemo.pipelines.ScrapydemoPipeline': 300,  # 300是优先级，多个 pipelines 时值越小优先级越高
+   'ScrapyDemo.pipelines.ScrapydemoPipeline': 300,  # 300是权重，拥有多个 pipelines 时，值越小优先级越高
 }
 ```
-7. Scrapy提供5层 log 级别，
-```
-Scrapy提供5层 log 级别:
-CRITICAL - 严重错误(critical)
-ERROR - 一般错误(regular errors)
-WARNING - 警告信息(warning messages)
-INFO - 一般信息(informational messages)
-DEBUG - 调试信息(debugging messages)
-在setting.py中进行以下设置可以被用来配置logging:
-LOG_ENABLED 默认: True，启用logging
-LOG_ENCODING 默认: 'utf-8'，logging使用的编码
-LOG_FILE 默认: None，在当前目录里创建logging输出文件的文件名
-LOG_LEVEL 默认: 'DEBUG'，log的最低级别
-LOG_STDOUT 默认: False 如果为 True，进程所有的标准输出(及错误)将会被重定向到log中。
-例如，执行 print "hello" ，其将会在Scrapy log中显示
-```
-设置`LOG_LEVEL = "WARNING"`则不显示 log 级别低于 WARNING 的日志
+7. yield 可以返回的四种数据类型
+- BaseItem
+- request
+- dict 字典
+- None
 
-## 运行scrapy项目
-运行scrapy项目。需要在终端，进入项目所在的路径，然后scrapy crawl [爬虫名字]即可运行指定的爬虫。如果不想每次都在命令行中运行，那么可以把这个命令写在一个文件中。
+## 运行scrapy 项目
+运行scrapy项目。需要在终端，进入项目所在的路径，然后 scrapy crawl [爬虫名字]即可运行指定的爬虫。如果不想每次都在命令行中运行，那么可以把这个命令写在一个文件中。
 以后就在pycharm中执行运行这个文件就可以了。比如现在新创建一个文件叫做start.py，然后在这个文件中填入以下代码：
 ```python
 from scrapy import cmdline
@@ -191,6 +212,36 @@ from scrapy.http.response.html import HtmlResponse # 可以Ctrl+B查看所有支
 ```
 `@deprecated(use_instead='.xpath()')` 代表已经放弃的方法使用`.xpath()`代替
 
+## 实现翻页请求
+第一步找到下一页地址，第二步构造一个关于下一页url地址的request请求传给调度器。
+scrapt.Request 能构造一个requests，同时指定提取数据的 callback 函数
+`scrapt.Request(next_page_url,callback=self.parse)`
+
+```
+next_page_url = response.xpath("//a[text()='下一页']/@href").get()
+while len(next_page_url)>0
+  yield scrapt.Request(next_page_url,callback=self.parse)
+```
+```
+next_url = response.xpath("//a[@id='next']/@href").get()
+if next_url != "javascript:;":
+  next_url = "http://hr.tencent.com/" + next_url
+  yield scrapy.Request(
+    next_url,
+    callback = self.parse2,
+    meta = {"item":item}  #使用 meta 进行数据传递
+  )
+
+def parse2(self, response):
+   response.meta["item"]
+```
+
+## scrapy.Request 知识点
+scrapy.Request(url, [,callback, method='GET', headers, body, cookies, meta, dont_filter=False])
+
+- callback 指定传入的url 交给那个解析函数去处理
+- meta 实现在不同的解析函数中传递数据，默认会携带部分信息，比如下载延迟，请求深度等
+- dont-filter 让 scrapy 的去重不会过滤当前的url ,scrapy 默认有url 去重的功能
 
 ## 完整的爬虫代码
 
@@ -396,9 +447,9 @@ class MongoDBPipeline(object):
         db = client["zdm"]
         self.SmzdmItem = db["SmzdmItem"]
     def process_item(self, item, spider):
-        if isinstance(item, SmzdmItem):
+        if isinstance(item, SmzdmItem): # 这里判断如果 item 是 SmzdmItem 的类型，则写入数据库
             try:
-                self.SmzdmItem.insert(dict(item))
+                self.SmzdmItem.insert(dict(item)) # MongoDB只能插入一个字典，这里的 item 是一个对象，使用强制类型 dict 转换
             except Exception:
                 pass
         return item
@@ -433,7 +484,7 @@ ITEM_PIPELINES = {
 但是因为scrapy是一个比较重的框架。每次运行起来都要等待一段时间。因此要去验证我们写的提取规则是否正确，是一个比较麻烦的事情。
 因此Scrapy提供了一个shell，用来方便的测试规则。当然也不仅仅局限于这一个功能。
 
-打开cmd终端，进入到Scrapy项目所在的目录，然后进入到scrapy框架所在的虚拟环境中，输入命令scrapy shell 。
+打开cmd终端，进入到Scrapy项目所在的目录，然后进入到scrapy框架所在的虚拟环境中，输入命令scrapy shell [网址]。
 就会进入到scrapy的shell环境中。在这个环境中，你可以跟在爬虫的parse方法中一样使用了。
 
 ```
@@ -441,6 +492,12 @@ ITEM_PIPELINES = {
 >>> response.xpath("//div[@class='feed-pagenation']//ul//li[last()]//a/@href").get()
 'https://www.smzdm.com/p7/'
 ```
+- response.url          当前响应的url地址
+- response.request.url  当前响应对应的请求的url地址
+- response.headers      响应头
+- response.body         响应体，也就是html代码，默认是byte类型
+- response.body.decode() 响应体，也就是html代码，经过解码 
+- response.request.headers 当前响应的请求头
 
 ## CrawlSpider
 
@@ -639,22 +696,22 @@ redis是一种支持分布式的nosql数据库,他的数据是保存在内存中
 相关参考文档：http://redisdoc.com/index.html
 
 ### redis使用场景
-1. 登录会话存储：存储在redis中，与memcached相比，数据不会丢失。
+1. 登录会话存储：存储在 redis 中，与 memcached 相比，数据不会丢失。
 2. 排行版/计数器：比如一些秀场类的项目，经常会有一些前多少名的主播排名。还有一些文章阅读量的技术，或者新浪微博的点赞数等。
-3. 作为消息队列：比如celery就是使用redis作为中间人。
+3. 作为消息队列：比如 celery 就是使用 redis 作为中间人。
 4. 当前在线人数：还是之前的秀场例子，会显示当前系统有多少在线人数。
-5. 一些常用的数据缓存：比如我们的BBS论坛，板块不会经常变化的，但是每次访问首页都要从mysql中获取，可以在redis中缓存起来，不用每次请求数据库。
+5. 一些常用的数据缓存：比如我们的BBS论坛，板块不会经常变化的，但是每次访问首页都要从 mysql 中获取，可以在redis中缓存起来，不用每次请求数据库。
 6. 把前200篇文章缓存或者评论缓存：一般用户浏览网站，只会浏览前面一部分文章或者评论，那么可以把前面200篇文章和对应的评论缓存起来。用户访问超过的，就访问数据库，并且以后文章超过200篇，则把之前的文章删除。
-7. 好友关系：微博的好友关系使用redis实现。
+7. 好友关系：微博的好友关系使用 redis 实现。
 8. 发布和订阅功能：可以用来做聊天软件。
 
 ## redis和memcached的比较
 memcached	redis
 类型    	纯内存数据库	  内存磁盘同步数据库
-数据类型	在定义value时就要固定数据类型	不需要
+数据类型	在定义 value 时就要固定数据类型	不需要
 虚拟内存	不支持	支持
 过期策略	支持	支持
-存储数据安全	不支持	可以将数据同步到dump.db中
+存储数据安全	不支持	可以将数据同步到 dump.db 中
 灾难恢复	不支持	可以将磁盘中的数据恢复到内存中
 分布式	支持	主从同步
 订阅与发布	不支持	支持
