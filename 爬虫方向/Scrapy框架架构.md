@@ -235,6 +235,21 @@ if next_url != "javascript:;":
 def parse2(self, response):
    response.meta["item"]
 ```
+ajax 请求，构造下一页请求
+```python
+import re
+from copy import deepcopy
+
+page_count = int(re.findall("var page_count=(.*?);", response.body.decode())[0])
+current_page = int(re.findall("var current_page=(.*?);", response.body.decode())[0])
+if current_count < page_count:
+  next_url = item["s_href"] + "?pageNameber={}&sort=0".format(current_page+1)
+  yield scrapy.Request(
+    next_url,
+    callback = self.parse_list,
+    meta = {"item":deepcopy(item)}
+  )
+```
 
 ## scrapy.Request 知识点
 scrapy.Request(url, [,callback, method='GET', headers, body, cookies, meta, dont_filter=False])
