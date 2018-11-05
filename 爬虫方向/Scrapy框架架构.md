@@ -165,8 +165,13 @@ scrapy.Field() 是一个占位符，也是一个字典
 在获取数据的时候，使用不同的item 来存放不同的数据
 在把数据交给pipeline 的时候，可以通过isinstance(item, 类名)来判断数据是属于哪个item, 进行不同的数据(item)处理
 
-## 页面抽取技巧
+## xpath 页面抽取技巧
+数组切片
 tr_list = response.xpath("//div")
+tr_list = response.xpath("//table[@class='tableTeam']//tr")[1:]
+
+去除空格与换行
+item["ORIGIN"] = tr.xpath('normalize-space(.//td[5]//text())').get()
 
 ## 笔记
 1. response 是一个`<class 'scrapy.http.response.html.HtmlResponse'>`对象，可以执行`xpath`和`css`语法来提取数据
@@ -234,6 +239,29 @@ if next_url != "javascript:;":
 
 def parse2(self, response):
    response.meta["item"]
+```
+
+利用整体数据大小、分页大小与当前页面数三者判断分页
+```
+total_tr = response.xpath("//div[@id='infos']/span/text()").get()
+total_tr = int(re.findall('\d+', total_tr)[0])
+pageSize = int(self.pageSize)
+total_pageNum = math.ceil(total_tr / pageSize)
+
+if total_pageNum > int(self.pageNo) :
+  self.pageNo = str( int(self.pageNo) +1)
+  yield scrapy.FormRequest(
+    url='http://activity.gysta.gov.cn/common_execute.action',
+    formdata={
+      'path': 'teams',
+      'name': '请输入关键字查询',
+      'pageNo': self.pageNo,
+      'pageSize': self.pageSize,
+      'orderBy': '',
+      'orderType': ''
+    },
+    callback=self.parse
+  )
 ```
 
 ## scrapy.Request 知识点
