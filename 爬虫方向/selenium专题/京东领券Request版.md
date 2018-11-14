@@ -1,6 +1,6 @@
 # 京东领券Request版
 
-京东有保护，点击太快了会保护，目测在 应该是 5 秒每次
+京东有保护，点击太快了会保护，目测在是 5 秒每次
 
 ```
 神券到手还要 10 秒
@@ -34,7 +34,7 @@ couponUrl = 'https://a.jd.com/indexAjax/getCoupon.html?callback=jQuery2782959&ke
 referer = 'https://a.jd.com/'
  
 getCouponNum = 100 # 抢券次数
-getCouponInterval = 500  # 抢券间隔单位毫秒  1000毫秒 = 1秒
+getCouponInterval = 4500  # 抢券间隔单位毫秒  1000毫秒 = 1秒
 
 def printCountTime(str, num):
     for i in range(num):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     CountTime = int(TargetTime - time())
     print("抢券目标时间 %s" % strftime('%Y-%m-%d %H:%M:%S', localtime(TargetTime)) )
     print("当前时间 %s" % strftime('%Y-%m-%d %H:%M:%S', localtime(time())) )
-    while CountTime > 60:
+    while CountTime > 180:
         print("抢券倒计时：%s 分 %s 秒" % (CountTime // 60, CountTime % 60))
         CountTime = CountTime - 1
         sleep(1)
@@ -79,8 +79,11 @@ if __name__ == '__main__':
             if(CountTime < 0):
                 print("抢券时间终于到了，火速抢券！")
                 getCoupon(getCouponNum, getCouponInterval)
-
+                break
+                
             printCountTime("神券到手还要", CountTime)
             CountTime = -1
+            
+    print("抢券结束！")
 
 ```
