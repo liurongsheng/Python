@@ -71,6 +71,10 @@ if __name__ == '__main__':
     # 设置代理
     # options.add_argument("--proxy-server=http://127.0.0.1:8087")
     options.add_experimental_option('mobileEmulation', mobileEmulation)
+    options.add_argument("--auto-open-devtools-for-tabs")
+    options.add_argument("--disable-notifications")
+    options.add_argument("disable-infobars")
+    extension_path = 'd:\gitHub\quan\XPathHelper2.0.2.crx'
 
     driver_path = r"d:\gitHub\chromedriver.exe"
     driver = webdriver.Chrome(executable_path=driver_path, chrome_options=options)
