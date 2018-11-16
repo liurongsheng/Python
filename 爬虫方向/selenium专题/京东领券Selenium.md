@@ -1,6 +1,8 @@
 ```python
 from time import sleep, time, mktime, strptime, strftime, localtime
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 import json
 
 TargetTimeInput = "2018-11-15 14:03:00"
@@ -14,39 +16,32 @@ def printCountTime(str, num):
         sleep(1)
 
 def clickTarget(driver):
-    # try:
-        driver.get(url)
-        sleep(3)
+    driver.get(url)
+    # driver.find_element_by_xpath("//div[@class='nav']//a[@class='arrow']").send_keys(Keys.ENTER) # 选择下拉箭头
+    driver.find_element_by_link_text('发现好店').send_keys(Keys.ENTER) # 选择支付白条
+    sleep(3)
+    # clickTarget = driver.find_element_by_xpath("//span[contains(text(),'手机话费充值商品')]").find_element_by_xpath(".//..")
+    # driver.find_elements_by_class_name("coupon_default_inner")[2].click()
 
-        # print(driver.find_element_by_xpath('//div[@class="nav"]//ul//li[3]/a').text)
-        # driver.find_element_by_xpath('//div[@class="nav"]//ul//li[3]/a').click()
-        # driver.find_element_by_xpath("//div[@class='nav']//a[@class='arrow']").click()
-        # driver.find_element_by_link_text(str(u"发现好店".encode('utf-8'))).click()
+    js = 'document.getElementsByClassName("coupon_default_inner")[2].click()'
+    print(driver.execute_script(js))
+    sleep(3)
 
-        click_button = driver.find_element_by_link_text(str(u"发现好店".encode('utf-8')))
-        for i in click_button:
-            print(i.text)
-        sleep(3)
-        # click_button.click()
-        print("点击了")
-        sleep(100)
-        # click_button = driver.find_element_by_xpath("//p[@class='coupon_default_name']")
-        # sleep(1)
-        # click_button.click()
-        # print(click_button)
-        # ClickNum = 3000
-        # while 1:
-        #     if TargetTime - time() < 1:
-        #         while ClickNum > 0:
-        #             click_button.click()
-        #             print("机器人点击了一次")
-        #             ClickNum = ClickNum - 1
-        #             sleep(0.1)
-        #
-        #     sleep(1)
+    clickAction = ActionChains(driver)
+    clickAction.move_to_element(clickTarget).click_and_hold().perform()
+    clickAction.move_to_element(clickTarget).click().send_keys(Keys.ENTER).perform()
+
+    print("抢券一次！")
+    # sleep(3)
+    # print(clickTarget.tag_name)
+    # clickAction = ActionChains(driver)
+    # clickAction.move_to_element(clickTarget).click_and_hold().perform()
+    # clickAction.move_to_element(clickTarget).send_keys(Keys.ENTER).perform()
+    sleep(300)
+
     # except:
-        print("脚本出错了！")
-        # driver.close()
+    #     print("脚本出错了！")
+    #     driver.close()
 
 
 def loginPageCaptcha(driver):
@@ -122,5 +117,4 @@ if __name__ == '__main__':
     else:
         print("时间不到3分钟了，跳转去登录抢券！")
     loginPage(driver)
-
 ```
