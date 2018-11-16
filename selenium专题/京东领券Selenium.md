@@ -74,7 +74,8 @@ def loginPage(driver):
     driver.get(url_login)
     sleep(1)
     with open('cookie.txt', 'r') as oldCookie:
-        oldCookie = json.loads(oldCookie.read())
+        if len(oldCookie) > 1:
+            oldCookie = json.loads(oldCookie.read())
 
     if len(oldCookie)>1:
         for c in oldCookie:
