@@ -1,8 +1,12 @@
 ```python
 from time import sleep, time, mktime, strptime, strftime, localtime
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+targetText = '海尔净饮水旗舰店'
+
 import json
 
 TargetTimeInput = "2018-11-15 14:03:00"
@@ -17,32 +21,20 @@ def printCountTime(str, num):
 
 def clickTarget(driver):
     driver.get(url)
+    sleep(3)
     # driver.find_element_by_xpath("//div[@class='nav']//a[@class='arrow']").send_keys(Keys.ENTER) # 选择下拉箭头
-    driver.find_element_by_link_text('发现好店').send_keys(Keys.ENTER) # 选择支付白条
-    sleep(3)
-    # clickTarget = driver.find_element_by_xpath("//span[contains(text(),'手机话费充值商品')]").find_element_by_xpath(".//..")
-    # driver.find_elements_by_class_name("coupon_default_inner")[2].click()
-
-    js = 'document.getElementsByClassName("coupon_default_inner")[2].click()'
-    print(driver.execute_script(js))
-    sleep(3)
-
-    clickAction = ActionChains(driver)
-    clickAction.move_to_element(clickTarget).click_and_hold().perform()
-    clickAction.move_to_element(clickTarget).click().send_keys(Keys.ENTER).perform()
-
-    print("抢券一次！")
     # sleep(3)
-    # print(clickTarget.tag_name)
-    # clickAction = ActionChains(driver)
-    # clickAction.move_to_element(clickTarget).click_and_hold().perform()
-    # clickAction.move_to_element(clickTarget).send_keys(Keys.ENTER).perform()
-    sleep(300)
-
-    # except:
-    #     print("脚本出错了！")
-    #     driver.close()
-
+    driver.find_element_by_link_text('家用电器').send_keys(Keys.ENTER) # 选择支付白条
+    clickTarget = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, "(//span[contains(text(), '海尔净饮水旗舰店')])"))
+    )
+    # print(clickTarget)
+    # clickTarget = driver.find_element_by_xpath("//span[contains(text(), '京东自营摄影摄像指定商品')]//..//..//div")
+    driver.execute_script("arguments[0].scrollIntoView({blank:'center'});", clickTarget)
+    sleep(3)
+    print(clickTarget)
+    clickTarget.click()
+    print("抢券一次！")
 
 def loginPageCaptcha(driver):
     try:
