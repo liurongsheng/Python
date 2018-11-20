@@ -33,10 +33,6 @@ def loginPageCaptcha(driver):
             cookieFile.write(json.dumps(cookies))
 
         clickTarget(driver)
-        # driver.find_element_by_id('captcha')
-        # print("找到登录图形码校验，请十秒内完成图形码校验")
-        # printCountTime("图形码校验", 10)
-        # driver.find_element_by_id('captcha')
     except:
         print("没有登录图形码校验")
         clickTarget(driver)
@@ -68,7 +64,7 @@ def loginPage(driver):
 
         driver.find_element_by_link_text("账户登录").click()
         driver.find_element_by_xpath("//input[@id='loginname']").send_keys("397149375@qq.com")
-        driver.find_element_by_xpath("//input[@id='nloginpwd']").send_keys("liurongsheng8")
+        driver.find_element_by_xpath("//input[@id='nloginpwd']").send_keys("密码")
         sleep(1)
         driver.find_element_by_id('loginsubmit').click()
         print("登录点击一次，如果没有跳转或者弹出登录图形码校验需要手动辅助")
