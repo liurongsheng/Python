@@ -161,7 +161,7 @@ line(img, pt1, pt2, color, thickness=None, lineType=None, shift=None)
 rectangle(img, pt1, pt2, color, thickness=None, lineType=None, shift=None)
 
 画圆 指定中心的坐标和半径大小
-circle(img, center, radius, color, thickness=None, lineType=None, shift=None):
+circle(img, center, radius, color, thickness=None, lineType=None, shift=None)
 
 画椭圆 指定中心点坐标，长轴，短轴，逆时针旋转角度，顺时针起始角度，顺时针结束角度
 ellipse(img, center, axes, angle, startAngle, endAngle, color, thickness=None, lineType=None, shift=None)
@@ -653,3 +653,12 @@ Sobel 和 Scharr 本质是求一阶或二阶导数。
 Scharr 是对Sobel(使用小的卷积核求解梯度角度时)的优化，Laplacian求二阶倒数
 
 Sobel 算子是高斯平滑与微分操作的结合体
+
+
+---
+
+
+## 最小外界圆
+找到一个对象的外切圆，是所有能够包含对象的圆中面积最小的一个
+
+cv2.minEnclosingCircle()
