@@ -1,5 +1,5 @@
 Twisted==19.7.0
-Scrapy==1.5.1
+Scrapy==1.8.1
 pymongo==3.7.1
 pymysql==0.9.2
 
