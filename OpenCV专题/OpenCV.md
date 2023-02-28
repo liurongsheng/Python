@@ -1,20 +1,22 @@
 # OpenCV 开源计算机视觉库
 
-[项目地址](https://github.com/opencv/opencv) https://github.com/opencv/opencv
+[项目地址](https://github.com/opencv/opencv) <https://github.com/opencv/opencv>
 
-[官方文档总地址](https://docs.opencv.org) https://docs.opencv.org 
+[官方文档总地址](https://docs.opencv.org) <https://docs.opencv.org>
 
-[3.0-beta 官方文档 ](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_tutorials.html) https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_tutorials.html 
+[3.0-beta 官方文档](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_tutorials.html) <https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_tutorials.html>
 
-[中文社区](http://www.opencv.org.cn/forum.php?gid=7) http://www.opencv.org.cn/forum.php?gid=7 
+[中文社区](http://www.opencv.org.cn/forum.php?gid=7) <http://www.opencv.org.cn/forum.php?gid=7>
 
-https://arxiv.org
+<https://arxiv.org>
 
 ## 安装使用
+
 ```
 pip install numpy Matplotlib
 pip install opencv-python
 ```
+
 Numpy 是经过优化了的进行快速矩阵运算的软件包。能用矩阵运算就不用循环
 
 ## cv2.imread()，cv2.imshow()，cv2.imwrite()
@@ -35,22 +37,24 @@ elif k == ord('s'): # wait for 's' key to save and exit
 ```
 
 cv2.imread() # 读入图像
+
 - cv2.IMREAD_COLOR # 彩色图，默认
 - cv2.IMREAD_GRAYSCALE # 以灰度模式读入图像，值为0的时候也就是这个模式
 - cv2.IMREAD_UNCHANGED # 读入一幅图像，并且包括图像的alpha 通道
 
 cv2.imshow(参数1, 参数2) # 显示图像
+
 - 参数1 # 窗口的名字
 - 参数2 # 图像
 
 cv2.imwrite(r"D:\12.jpg", img, [int(cv2.IMWRITE_JPEG_QUALITY), 85])
+
 - 参数1 保存的路径及文件名
 - 参数2 图像矩阵
 - 参数3 可选
   对于 jpeg 表示图像的质量为0-100的整数，默认95，cv2.IMWRITE_JPEG_QUALITY 类型为Long，必须转换为int
-  对于 png 表示压缩级别为 0-9的整数，默认3，数字越大，压缩级别越高，尺寸越小 
+  对于 png 表示压缩级别为 0-9的整数，默认3，数字越大，压缩级别越高，尺寸越小
   
-
 cv2.waitKey() 是一个键盘绑定函数，函数等待特定的几毫秒，看是否有键盘输入
 特定的几毫秒之内，如果按下任意键，这个函数会返回按键的ASCII 码值，程序将会继续运行
 如果没有键盘输入，返回值为-1，如果我们设置这个函数的参数为0，那它将会无限期的等待键盘输入
@@ -59,6 +63,7 @@ cv2.destroyAllWindows() 可以轻易删除任何我们建立的窗口
 如果你想删除特定的窗口可以使用cv2.destroyWindow()，在括号内输入你想删除的窗口名
 
 指定打开的窗口大小
+
 ```
 import numpy as np
 import cv2
@@ -70,6 +75,7 @@ cv2.destroyAllWindows()
 ```
 
 ## 摄像头捕获视频
+
 ```
 import numpy as np
 import cv2
@@ -86,6 +92,7 @@ while(True):
 cap.release() # When everything done, release the capture
 cv2.destroyAllWindows()
 ```
+
 cap.read() 返回一个布尔值（True/False）。如果帧读取的是正确的，就是True。所以最后你可以通过检查他的返回值来查看视频文件是否已经到了结尾。
 
 有时cap 可能不能成功的初始化摄像头设备。这种情况下上面的代码会报错。你可以使用cap.isOpened()，来检查是否成功初始化了。
@@ -100,11 +107,13 @@ cap.read() 返回一个布尔值（True/False）。如果帧读取的是正确�
 默认情况下得到的值是640X480。但是我可以使用ret=cap.set(3,320)和ret=cap.set(4,240) 来把宽和高改成320X240。
 
 ## 保存视频
+
 1. 创建一个VideoWriter 的对象
 2. 指定一个输出文件的名字
 3. 指定FourCC 编码
 4. 指定播放频率和帧的大小
 5. isColor 标签，是True，每一帧就是彩色图，否则就是灰度图
+
 ```
 import numpy as np
 import cv2
@@ -168,7 +177,7 @@ ellipse(img, center, axes, angle, startAngle, endAngle, color, thickness=None, l
 
 画多边形 指定每个顶点的坐标，构建一个数组，数据类型为int32
 pts=np.array([[10,5],[20,30],[70,20],[50,10]], np.int32)
-pts=pts.reshape((-1,1,2)) 
+pts=pts.reshape((-1,1,2))
 
 这里reshape 的第一个参数为-1, 表明这一维的长度是根据后面的维度的计算出来的。
 如果第三个参数是False，我们得到的多边形是不闭合的（首尾不相连)
@@ -188,6 +197,7 @@ k = cv2.waitKey (0)
 ```
 
 ## 图像上添加文字
+
 指定 显示文字，显示位置，字体类型，字体大小，一般属性如颜色|粗细|线条类型(linetype=cv2.LINE_AA)
 
 putText(img, text, org, fontFace, fontScale, color, thickness=None, lineType=None, bottomLeftOrigin=None):
@@ -272,6 +282,7 @@ img.itemset((10,10,2),100)
 print img.item(10,10,2) # 输出 100
 
 ## 获取图像属性
+
 属性包括行、列、通道、图像数据类型、像素数目
 
 img.shape 获取图像形状，返回值是包含行数、列数、通道数的元组。灰度图返回值只有行数和列数，
@@ -284,7 +295,8 @@ img.size # 输出 378000
 img.dtype 获取图像的数据类型
 img.dtype # 输出 uint8
 
-## 图像 ROI 
+## 图像 ROI
+
 截取指定区域图像
 
 ball=img[280:340,330:390]
@@ -309,9 +321,9 @@ cv2.add()
 cv2.addWeighted()
 
 OpenCV的加法和 Numpy 的加法不一样，前者是饱和操作，后者是模操作，一般选择前者进行操作
-OpenCV -- cv2.add() 
+OpenCV -- cv2.add()
 Numpy -- res=img1+img2
- 
+
 x = np.uint8([250])
 y = np.uint8([10])
 print cv2.add(x,y) # 250+10 = 260 => 255
@@ -334,6 +346,7 @@ cv2.destroyAllWindow()
 ```
 
 ## 按位运算
+
 AND、OR、NOT、XOR
 要把一个标志放到另一幅图像上，如果是矩形可以使用ROI，不过不是矩形可以使用按位运算实现
 
@@ -370,6 +383,7 @@ cv2.destroyAllWindows()
 ```
 
 ## 颜色空间转换
+
 OpenCV中有超过150种进行颜色空间转换的方法。常用的是BGR<-->Gray和BGR<-->HSV
 
 cv2.cvtColor()，cv2.inRange()
@@ -380,11 +394,13 @@ BGR<-->Gray 使用的 flag 是cv2.COLOR_BGR2GRAY
 BGR<-->HSV  使用的 flag 是cv2.COLOR_BGR2HSV
 
 OpenCV 的HSV 格式中
+
 - H（色彩/色度）的取值范围是[0，179]
 - S（饱和度）的取值范围[0，255]
 - V（亮度）的取值范围[0，255]
 
 将BGR转为HSV后可以简单的获取特定的颜色
+
 ```
 import cv2
 import numpy as np
@@ -405,7 +421,9 @@ cv2.destroyAllWindows()
 ```
 
 ## 旋转图像
+
 cv2.getRotationMatrix2D(center, angle, scale)
+
 - 参数1旋转中心
 - 参数2旋转角度
 - 旋转后的缩放因子
@@ -430,7 +448,8 @@ cv2.destroyAllWindows()
 ```
 
 ## 透视变化
-输入图上找到4个点坐标，任意3个点都不能共线 
+
+输入图上找到4个点坐标，任意3个点都不能共线
 cv2.getPerspectiveTransform(src, dst)
 
 ## 图像阈值
@@ -438,15 +457,17 @@ cv2.getPerspectiveTransform(src, dst)
 简单阈值
 当像素值高于阈值时，给像素赋予一个新值，否则赋予另一种颜色
 cv2.threshold(src, thresh, maxval, type, dst=None)
+
 - 参数1是原图像，应该是灰度图
 - 参数2对像素值进行分类的阈值
 - 参数3当像素值高于或低于阈值时应赋予的新值
 - 参数4阈值方法
   - cv2.THRESH_BINARY # 二值阈催化
-  - cv2.THRESH_BINARY_INV # 反向二值阈催化 
+  - cv2.THRESH_BINARY_INV # 反向二值阈催化
   - cv2.THRESH_TRUNC # 截断阈值化
   - cv2.THRESH_TOZERO # 超过阈值被设置为0
   - cv2.THRESH_TOZERO_INV # 低于阈值被置为0
+
 ```
 import cv2
 import numpy as np
@@ -471,11 +492,13 @@ plt.show()
 自适应阈值
 简单阈值是全局阈值，整幅图像采用一个值作为阈值，针对不同区域不同亮度情况下，采用不同的阈值
 adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C, dst=None)
+
 - adaptiveMethod 指定计算阈值的方法
   - cv2.ADPTIVE_THRESH_MEAN_C：阈值取自相邻区域的平均值
   - cv2.ADPTIVE_THRESH_GAUSSIAN_C：阈值取值相邻区域的加权和，权重为一个高斯窗口。
 - blockSize - 邻域大小（用来计算阈值的区域大小)
 - C 一个常数，阈值就等于的平均值或者加权平均值减去这个常数。
+
 ```
 import cv2
 import numpy as np
@@ -507,6 +530,7 @@ cv2.threshold()，但是需要多传入一个参数
 （flag）：cv2.THRESH_OTSU。这时要把阈值设为0。然后算法会找到最
 优阈值，这个最优阈值就是返回值retVal。如果不使用Otsu 二值化，返回的
 retVal 值与设定的阈值相等。
+
 ```
 import cv2
 import numpy as np
@@ -547,6 +571,7 @@ plt.show()
 ```
 
 ## 图像平滑
+
 使用不同的低通滤波器对图像进行模糊
 
 低通滤波器 LFP ，去除噪声，模糊图像
@@ -582,8 +607,10 @@ plt.show()
 ```
 
 OpenCV 四种模糊技术
+
 - 平均，由一个归一化卷积框完成。用卷积框覆盖区域所有像素的平均值来代替中心元素
   利用函数 cv2.blur() 和 cv2.boxFilter() 来完成
+
 ```
 import cv2
 import numpy as np
@@ -616,6 +643,7 @@ median = cv2.medianBlur(img,5)
 
 双边滤波使用空间高斯权重和灰度值相似性高斯权重，空间高斯函数确保只有邻近区域的像素对中心点有影响
 灰度值相似性高斯函数确保只有与中心像素灰度值相近的才会被用来做高斯模糊。
+
 ```
 blur = cv2.bilateralFilter(img, 9, 75, 75)
 
@@ -643,9 +671,11 @@ kernel = np.ones((5,5),np.uint8)
 gradient = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
 
 ## 图像梯度
+
 梯度简单来说就是求导
 
 OpenCV 提供三种不同的梯度滤波器，或者说高通滤波器
+
 - Sobel
 - Scharr
 - Laplacian
@@ -654,11 +684,10 @@ Scharr 是对Sobel(使用小的卷积核求解梯度角度时)的优化，Laplac
 
 Sobel 算子是高斯平滑与微分操作的结合体
 
-
 ---
 
-
 ## 最小外界圆
+
 找到一个对象的外切圆，是所有能够包含对象的圆中面积最小的一个
 
 cv2.minEnclosingCircle()

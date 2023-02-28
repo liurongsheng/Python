@@ -1,6 +1,7 @@
 # pip常用命令与源设置
 
 ## pip常用命令
+
 1. pip install you-get // 安装 you-get
 2. pip list // 显示已经安装的软件
 3. pip show you-get // 显示已安装 you-get 信息
@@ -12,6 +13,7 @@
 pip -V // 显示当前版本
 
 ## pip国内的一些镜像
+
 ```
 1. 阿里云 http://mirrors.aliyun.com/pypi/simple/ 
 2. 中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/ 
@@ -19,25 +21,32 @@ pip -V // 显示当前版本
 4. 清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/ 
 5. 中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/
 ```
+
 pip install Scrapy -i https://pypi.mirrors.ustc.edu.cn/simple
+
 ## pip升级自身
+
 ```
 pip install -U pip //升级pip
 
 pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple //临时指定源升级pip
 ```
 
-## 临时使用 
-可以在使用pip的时候在后面加上-i参数，指定pip源 
+## 临时使用
+
+可以在使用pip的时候在后面加上-i参数，指定pip源
+
 ```
 pip install scrapy -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 pip install pylint -i http://pypi.douban.com/simple 
-``` 
+```
+
 ## 永久修改
+
 //如果使用http链接，则需要trusted-host参数：
 
-linux: 
+linux:
 修改 ~/.pip/pip.conf (没有就创建一个)， 内容如下：
 
 ```
@@ -47,7 +56,7 @@ index-url = http://pypi.douban.com/simple
 trusted-host=pypi.douban.com
 ```
 
-windows: 
+windows:
 直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，在pip文件夹内新建文件pip.ini，内容如下
 
 ```

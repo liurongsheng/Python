@@ -1,7 +1,9 @@
 # Scrapy框架架构
+
 [官网文档](https://scrapy.org)
 
-## Scrapy框架介绍：
+## Scrapy框架介绍
+
 写一个爬虫，需要做很多的事情。比如：发送网络请求、数据解析、数据存储、反反爬虫机制（更换ip代理、设置请求头等）、异步请求等。
 这些工作如果每次都要自己从零开始写的话，比较浪费时间。
 
@@ -12,7 +14,7 @@
 非阻塞：关注的是程序在等待调用结果时的*状态*，指在不能立刻得到结果之前，调用不会阻塞当前线程。
 Scrapy 使用了Twisted 异步网络框架，使用 requests 模块慢的主要原因就是发送网络请求太慢，而网络请求还是不可控的。
 
-## Scrapy框架模块功能：
+## Scrapy框架模块功能
 
 1. Scrapy Engine（引擎）：Scrapy框架的核心部分。负责在Spider和ItemPipeline、Downloader、Scheduler中间通信、传递数据等。
 2. Spider（爬虫）：发送需要爬取的链接给引擎，最后引擎把其他模块请求回来的数据再发送给爬虫，爬虫就去解析想要的数据。
@@ -23,10 +25,11 @@ Scrapy 使用了Twisted 异步网络框架，使用 requests 模块慢的主要�
 6. Downloader Middlewares（下载中间件）：可以扩展下载器和引擎之间通信功能的中间件。
 7. Spider Middlewares（Spider中间件）：可以扩展引擎和爬虫之间通信功能的中间件。
 
-
 ## 创建虚拟环境 virtualenvwrapper
+
 在当前的目录中创建一个文件夹，包含了Python可执行文件，以及 pip 库的一份拷贝，在虚拟环境中任何你使用pip安装的包将会放在 venv 文件夹中，与全局安装的Python隔绝开。
 虚拟环境的名字（此例中是 venv ）可以是任意的；若省略名字将会把文件均放在当前目录。
+
 ```
 pip install virtualenvwrapper-win
 mkvirtualenv venv # 创建虚拟环境
@@ -41,26 +44,29 @@ pip install Scrapy
 ```
 
 ## 快速安装
+
 1. 安装：通过 `pip install Scrapy` 即可安装。
-2. [Scrapy官方文档](http://doc.scrapy.org/en/latest)：http://doc.scrapy.org/en/latest
-3. [Scrapy中文文档](http://scrapy-chs.readthedocs.io/zh_CN/latest/index.html)：http://scrapy-chs.readthedocs.io/zh_CN/latest/index.html
+2. [Scrapy官方文档](http://doc.scrapy.org/en/latest)：<http://doc.scrapy.org/en/latest>
+3. [Scrapy中文文档](http://scrapy-chs.readthedocs.io/zh_CN/latest/index.html)：<http://scrapy-chs.readthedocs.io/zh_CN/latest/index.html>
 
 如果在windows系统下，提示这个错误`ModuleNotFoundError: No module named 'win32api'`，那么使用以下命令可以解决：`pip install pypiwin32`；
 提示这个错误`Could not find suitable distribution for Requirement.parse('incremental>=16.10.1')`
+
 ```python
 pip install --upgrade incremental
 pip install Twisted
 pip install Scrapy
 ```
+
 `pip install Twisted` 如果出错报 `error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ Build Tools": https://visualstudio.microsoft.com/downloads/`
 需要到网站下载匹配的离线包安装 `https://www.lfd.uci.edu/~gohlke/pythonlibs/#twisted`,
 然后进入下载的文件夹安装 `pip install ./Twisted‑18.7.0‑cp37‑cp37m‑win_amd64.whl`
- 
- 
+
 如果在ubuntu上安装scrapy之前，需要先安装以下依赖：
 `sudo apt-get install python3-dev build-essential python3-pip libxml2-dev libxslt1-dev zlib1g-dev libffi-dev libssl-dev`，然后再通过 `pip install scrapy` 安装。
 
 ## 创建项目与爬虫
+
 要使用Scrapy框架创建项目，需要通过命令来创建。(旧版本需要进入文件夹后初始化一个工程项目，新版本比如Scrapy 1.5.1，已经不需要进入文件夹下初始化了)
 
 然后使用以下命令创建：
@@ -72,6 +78,7 @@ scrapy startproject ScrapyDemo
 scrapy genspider zhiping "zhiping.com"
 
 ## 目录结构
+
 1. items.py：用来存放爬虫爬取下来数据的模型。
 2. middlewares.py：用来存放各种中间件的文件。
 3. pipelines.py：用来将items的模型存储到本地磁盘中。
@@ -80,6 +87,7 @@ scrapy genspider zhiping "zhiping.com"
 6. spiders包：以后所有的爬虫，都是存放到这个里面。
 
 ## scrapy 可用命令
+
 ```
 Available commands:
   bench         Run quick benchmark test
@@ -94,13 +102,17 @@ Available commands:
 ```
 
 ## 使用Scrapy框架爬取糗事百科段子
+
 在根目录( scrapy.cfg 同级目录 )使用命令创建一个爬虫：
+
 ```python
 scrapy genspider qsbk "qiushibaike.com"
 ```
+
 创建了一个名字叫做 qsbk 的爬虫，并且能爬取的网页只会限制在 `qiushibaike.com` 这个域名下。
 
 爬虫代码解析：
+
 ```python
 import scrapy
 
@@ -112,6 +124,7 @@ class QsbkSpider(scrapy.Spider):
    def parse(self, response):
        pass
 ```
+
 其实这些代码我们完全可以自己手动去写，而不用命令。只不过是不用命令，自己写这些代码比较麻烦。
 要创建一个Spider，那么必须自定义一个类，继承自scrapy.Spider，然后在这个类中定义三个属性和一个方法。
 
@@ -122,11 +135,13 @@ class QsbkSpider(scrapy.Spider):
 parse：引擎会把下载器下载回来的数据扔给爬虫解析，爬虫再把数据传给这个parse方法。这个是个固定的写法。
 这个方法的作用有两个，第一个是提取想要的数据。第二个是生成下一个请求的url。
 
-## 修改settings.py代码：
+## 修改settings.py代码
+
 在做一个爬虫之前，一定要记得修改`setttings.py`中的设置。两个地方是强烈建议设置的。
 
 1. ROBOTSTXT_OBEY设置为False。默认是True。即遵守机器协议，那么在爬虫的时候，scrapy首先去找robots.txt文件，如果没有找到。则直接停止爬取。
 2. DEFAULT_REQUEST_HEADERS添加User-Agent。这个也是告诉服务器，我这个请求是一个正常的请求，不是一个爬虫。
+
 ```
 ROBOTSTXT_OBEY = False
 DEFAULT_REQUEST_HEADERS = {
@@ -135,6 +150,7 @@ DEFAULT_REQUEST_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',
 }
 ```
+
 3. 设置`LOG_LEVEL = "WARNING"`则不显示 log 级别低于 WARNING 的日志
 `LOG_FILE = './log.log'`保存 log 日志到文件，终端不会显示日志内容。
 使用的时候需要import logging，实例化logger的方式可以在任何文件中使用logger输出内容
@@ -157,56 +173,66 @@ LOG_STDOUT 默认: False 如果为 True，进程所有的标准输出(及错误)
 ```
 
 ## item.py 的使用
+
 定义需要的字段
 scrapy.Item 是一个字典
-scrapy.Field() 是一个占位符，也是一个字典 
+scrapy.Field() 是一个占位符，也是一个字典
 
 为什么scrapy 要定义一个字典：
 在获取数据的时候，使用不同的item 来存放不同的数据
 在把数据交给pipeline 的时候，可以通过isinstance(item, 类名)来判断数据是属于哪个item, 进行不同的数据(item)处理
 
 ## xpath 页面抽取技巧
+
 数组切片
 tr_list = response.xpath("//div")
-tr_list = response.xpath("//table[@class='tableTeam']//tr")[1:]
+tr_list = response.xpath["//table[@class='tableTeam']//tr"](1:)
 
 去除空格与换行
 item["ORIGIN"] = tr.xpath('normalize-space(.//td[5]//text())').get()
 
 ## 笔记
+
 1. response 是一个`<class 'scrapy.http.response.html.HtmlResponse'>`对象，可以执行`xpath`和`css`语法来提取数据
 2. 提取出来的数据，是一个`selector`和`SelectorList`对象，如果想要获取其中的字符串需要使用 get() 和 getall()
 3. get() 获取 selector 对象中的第一个文本，返回一个str类型，getall() 获取 selector 对象中的所有文本，返回一个列表
 4. 如果数据解析回来，要传给`pipline`处理，可以使用`yield`来(或者定义一个列表收集所有的item，最后统一返回)
 5. 建议在`item.py`中定义好模型，以后不要使用字典的形式
 6. pipline 是专门用来保存数据的，其中有三个方法最常用，要激活 pipelines，应该在settings.py文件中设置`ITEM_PIPELINES`
+
 ```
 def open_spider(self, spider): # 开始运行爬虫的时候执行代码
 def process_item(self, item, spider): # 当爬虫有item传过来的时候会被调用，注意方法名不能修改为其他名称
                                         这里的spider指的是传递 item 的那个爬虫，可以使用打印 spider.name 属性验证
 def closs_spider(self, spider): # 关闭爬虫的时候执行代码
 ```
+
 ```
 # 使用 pipelines 时需要配置 settings.py 文件开启 pipelines
 ITEM_PIPELINES = {
    'ScrapyDemo.pipelines.ScrapydemoPipeline': 300,  # 300是权重，拥有多个 pipelines 时，值越小优先级越高
 }
 ```
+
 7. yield 可以返回的四种数据类型
+
 - BaseItem
 - request
 - dict 字典
 - None
 
 ## 运行scrapy 项目
+
 运行scrapy项目。需要在终端，进入项目所在的路径，然后 scrapy crawl [爬虫名字]即可运行指定的爬虫。如果不想每次都在命令行中运行，那么可以把这个命令写在一个文件中。
 以后就在pycharm中执行运行这个文件就可以了。比如现在新创建一个文件叫做start.py，然后在这个文件中填入以下代码：
+
 ```python
 from scrapy import cmdline
 cmdline.execute("scrapy crawl qsbk".split())
 ```
 
 ## 使用 type 查看 python 源代码
+
 ```python
 from scrapy.http.response.html import HtmlResponse # 可以Ctrl+B查看所有支持的方法
 
@@ -215,9 +241,11 @@ from scrapy.http.response.html import HtmlResponse # 可以Ctrl+B查看所有支
 ===
 <class 'scrapy.http.response.html.HtmlResponse'>
 ```
+
 `@deprecated(use_instead='.xpath()')` 代表已经放弃的方法使用`.xpath()`代替
 
 ## 实现翻页请求
+
 第一步找到下一页地址，第二步构造一个关于下一页url地址的request请求传给调度器。
 scrapt.Request 能构造一个requests，同时指定提取数据的 callback 函数
 `scrapt.Request(next_page_url,callback=self.parse)`
@@ -227,6 +255,7 @@ next_page_url = response.xpath("//a[text()='下一页']/@href").get()
 while len(next_page_url)>0
   yield scrapt.Request(next_page_url,callback=self.parse)
 ```
+
 ```
 next_url = response.xpath("//a[@id='next']/@href").get()
 if next_url != "javascript:;":
@@ -240,7 +269,9 @@ if next_url != "javascript:;":
 def parse2(self, response):
    response.meta["item"]
 ```
+
 ajax 请求，构造下一页请求
+
 ```python
 import re
 from copy import deepcopy
@@ -257,6 +288,7 @@ if current_count < page_count:
 ```
 
 利用整体数据大小、分页大小与当前页面数三者判断分页
+
 ```
 total_tr = response.xpath("//div[@id='infos']/span/text()").get()
 total_tr = int(re.findall('\d+', total_tr)[0])
@@ -280,6 +312,7 @@ if total_pageNum > int(self.pageNo) :
 ```
 
 ## scrapy.Request 知识点
+
 scrapy.Request(url, [,callback, method='GET', headers, body, cookies, meta, dont_filter=False])
 
 - callback 指定传入的url 交给那个解析函数去处理
@@ -289,6 +322,7 @@ scrapy.Request(url, [,callback, method='GET', headers, body, cookies, meta, dont
 ## 完整的爬虫代码
 
 爬虫部分代码
+
 ```python
 # from scrapy.http.response.html import HtmlResponse
 # from scrapy.selector.unified import SelectorList
@@ -312,7 +346,9 @@ class QsbkSpider(scrapy.Spider): # 继承 scrapy.Spider 类
             item = ScrapydemoItem(author=author, content=content)
             yield item
 ```
+
 items.py部分代码
+
 ```python
 import scrapy
 class ScrapydemoItem(scrapy.Item):
@@ -321,6 +357,7 @@ class ScrapydemoItem(scrapy.Item):
 ```
 
 pipeline部分代码
+
 ```python
 import json
 
@@ -341,7 +378,9 @@ class ScrapydemoPipeline(object):
         self.fp.close()
         print("爬虫结束")
 ```
+
 start.py 代码
+
 ```python
 from scrapy import cmdline
 
@@ -350,14 +389,18 @@ cmdline.execute("scrapy crawl qsbk".split())
 ```
 
 ## 运行问题
+
 Python3.7，装上依赖包和 scrapy 后运行爬虫命令出错
+
 ```python
   File "c:\users\administrator\appdata\local\programs\python\python37\lib\site-packages\twisted\conch\manhole.py", line 154
       def write(self, data, async=Shark):
                               ^
 SyntaxError: invalid syntax
 ```
-将源码manhole.py中的async参数更改为shark（注意更换全部）可以直接点击错误跳转 
+
+将源码manhole.py中的async参数更改为shark（注意更换全部）可以直接点击错误跳转
+
 ```python
     def write(self, data, shark=False):
         self.handler.addOutput(data, shark)
@@ -383,6 +426,7 @@ JsonLinesItemExporter，每次调用export_item的时候把每个item存储到�
 坏处是每一个字典一行，整个文件不是一个满足json格式的文件
 
 pipeline 部分代码
+
 ```python
 # JsonItemExporter
 from scrapy.exporters import JsonItemExporter
@@ -404,6 +448,7 @@ class ScrapydemoPipeline(object):
         self.fp.close()
         print("爬虫结束")
 ```
+
 ```python
 # JsonLinesItemExporter
 from scrapy.exporters import JsonLinesItemExporter
@@ -425,6 +470,7 @@ class ScrapydemoPipeline(object):
 ```
 
 ## 获取多个页面
+
 ```python
 import scrapy
 from ScrapyDemo.items import ScrapydemoItem
@@ -453,6 +499,7 @@ class QsbkSpider(scrapy.Spider): # 继承 scrapy.Spider 类
 ```
 
 ## 值得买爬虫
+
 ```python
 ## smzdm.py
 import scrapy
@@ -535,11 +582,12 @@ ITEM_PIPELINES = {
 >>> response.xpath("//div[@class='feed-pagenation']//ul//li[last()]//a/@href").get()
 'https://www.smzdm.com/p7/'
 ```
+
 - response.url          当前响应的url地址
 - response.request.url  当前响应对应的请求的url地址
 - response.headers      响应头
 - response.body         响应体，也就是html代码，默认是byte类型
-- response.body.decode() 响应体，也就是html代码，经过解码 
+- response.body.decode() 响应体，也就是html代码，经过解码
 - response.request.headers 当前响应的请求头
 
 ## CrawlSpider
@@ -558,9 +606,11 @@ CrawlSpider继承自Spider，只不过是在之前的基础之上增加了新的
 >C:\gitHub\Boss\boss>scrapy genspider -t crawl zhiping "zhiping.com"
 
 ### LinkExtractors 链接提取器
+
 使用LinkExtractors可以不用程序员自己提取想要的url，然后发送请求。这些工作都可以交给LinkExtractors，他会在所有爬的页面中找到满足规则的url，实现自动的爬取。
 
 以下对LinkExtractors类做一个简单的介绍：
+
 ```python
 class scrapy.linkextractors.LinkExtractor(
     allow = (),
@@ -576,7 +626,9 @@ class scrapy.linkextractors.LinkExtractor(
     process_value = None
 )
 ```
+
 主要参数讲解：
+
 ```
 allow：允许的url。所有满足这个正则表达式的 url 都会被提取。
 deny：禁止的url。所有满足这个正则表达式的 url 都不会被提取。
@@ -585,8 +637,10 @@ deny_domains：禁止的域名。所有在这个里面指定的域名的 url 都
 restrict_xpaths：严格的 xpath。和 allow 共同过滤链接。
 ```
 
-### Rule 规则类：
+### Rule 规则类
+
 定义爬虫的规则类。以下对这个类做一个简单的介绍：
+
 ```python
 class scrapy.spiders.Rule(
     link_extractor, 
@@ -597,7 +651,9 @@ class scrapy.spiders.Rule(
     process_request = None
 )
 ```
+
 主要参数讲解：
+
 ```
 link_extractor：一个 LinkExtractor 对象，用于定义爬取规则。
 callback：满足这个规则的url，应该要执行哪个回调函数。因为CrawlSpider使用了 parse 作为回调函数，因此不要覆盖 parse 作为回调函数自己的回调函数。
@@ -606,6 +662,7 @@ process_links：从 link_extractor 中获取到链接后会传递给这个函数
 ```
 
 ## 下载文件和图片
+
 Scrapy 为下载 item 中包含的文件或图片提供了一个可重用的 item pipeline。
 这些 pipeline 有些共同的方法和结构（media pipeline）。Files Pipeline 和 Images Pipeline
 
@@ -617,7 +674,9 @@ Scrapy 为下载 item 中包含的文件或图片提供了一个可重用的 ite
 6. 异步下载，效率非常高
 
 ### 下载文件的 Files Pipeline
+
 使用 Files Pipeline 下载文件步骤
+
 1. 定义好一个 Item, 然后在这个 item 中定义两个属性，分别为 file_urls 以及 flies。
 file_urls 是用来存储需要下载的文件的url 链接，需要给一个列表
 2. 当文件下载完成后，会把文件下载的相关信息存储到 item 的 files 属性中，比如下载路径、下载的url和文件的校验码等。
@@ -625,7 +684,9 @@ file_urls 是用来存储需要下载的文件的url 链接，需要给一个列
 4. 启动pipeline ：在ITEM_PIPELINES 中设置scrapy.pipeline.files.FilesPipeline:1
 
 ### 下载图片的 Images Pipeline
+
 使用 Images Pipeline 下载图片步骤
+
 1. 定义好一个 Item, 然后在这个 item 中定义两个属性，分别为 image_urls 以及 images。
 file_urls 是用来存储需要下载的图片的url 链接，需要给一个列表
 2. 当文件下载完成后，会把文件下载的相关信息存储到 item 的 images 属性中，比如下载路径、下载的url和文件的校验码等。
@@ -633,16 +694,19 @@ file_urls 是用来存储需要下载的图片的url 链接，需要给一个列
 4. 启动pipeline ：在ITEM_PIPELINES 中设置scrapy.pipeline.images.ImagesPipeline:1
 
 ## Downloader Middlewares 下载器中间件
+
 下载器中间件是引擎和下载器之间通信的中间件，在这个中间件中我们可以设置代理，更换请求头等来达到反反爬虫的目的，要写下载器中间件，
 可以在下载器中实现两个方法。这两个是`process_request(self, request, spider)` 和`process_response(self, request, response, spider)`
 前者是在请求发送之前执行，后者是数据下载到引擎之前执行。
 
 ### process_request(self, request, spider)
+
 在下载器发送请求之前执行，可以在这里设置随机代理ip等操作。
+
 1. 参数
     -request: 发送请求的request 对象
     -spider: 发送请求的spider 对象
-    
+
 2. 返回值
     -返回None: 如果返回None,Scrapy将继续处理该request,执行其他中间件中的相应方法，直到合适的下载器处理函数被调用。
     -返回Response对象：Scrapy将不会调用任何其他的process_request 方法，将直接返回这个 response对象。已经激活的中间件的process_request()方法将会在每个response返回时被调用。
@@ -650,18 +714,21 @@ file_urls 是用来存储需要下载的图片的url 链接，需要给一个列
     如果这个方法中抛出了异常，则会调用process_exception 方法。
 
 ### process_response(self, request, response, spider)
+
 在下载器下载的数据到引擎中间执行的方法。
+
 1. 参数
     -request: 发送请求的request 对象
     -response：被处理的response 对象
     -spider: 发送请求的spider 对象
-    
+
 2. 返回值
     -返回Response对象：会将这个新的response对象传给其他中间件，最终传给爬虫。
     -返回Request对象：下载器链被切断，返回的request会重新被下载器调度下载。
     如果这个方法中抛出了异常，则会调用request 的errback方法，如果没有指定这个方法，那么会抛出一个异常。
 
 ### 随机请求头中间件
+
 [UserAgent列表](http://www.useragentstring.com/pages/useragentstring.php?typ=Browser)
 
 ```python
@@ -679,6 +746,7 @@ class UserAgentDownloadMiddleware(object):
         user_agent = random.choice(self.USER_AGENTS)
         request.headers['User-Agent'] = user_agent
 ```
+
 ```python
 ## settings.py
 ## smzdm 是当前项目名
@@ -686,6 +754,7 @@ DOWNLOADER_MIDDLEWARES = {
    'smzdm.middlewares.UserAgentDownloadMiddleware': 543,
 }
 ```
+
 ```python
 ## 测试爬虫脚本
 import scrapy
@@ -701,7 +770,9 @@ class HttpbinSpider(scrapy.Spider):
         # dont_filter 可以爬相同地址
         print(user_agent)
 ```
+
 ## ip代理池中间件
+
 ```python
 ## middlewares.py
 import random
@@ -711,6 +782,7 @@ class IPProxyDownloadMiddleware(object):
         proxy = random.choice(self.PROXIES)
         request.meta['proxy'] = proxy
 ```
+
 ```python
 ## settings.py
 ## smzdm 是当前项目名
@@ -718,7 +790,9 @@ DOWNLOADER_MIDDLEWARES = {
    'smzdm.middlewares.IPProxyDownloadMiddleware': 500,
 }
 ```
+
 独享代理的时候可以用的中间件配置
+
 ```python
 ## middlewares.py 
 import base64
@@ -731,14 +805,15 @@ class IPProxyDownloadMiddleware(object):
         request.headers['Proxy-Authorization'] = 'Basic ' + b64_user_password.decode('utf-8')
 ```
 
-
 ## redis教程
+
 redis是一种支持分布式的nosql数据库,他的数据是保存在内存中，同时redis可以定时把内存数据同步到磁盘，
 即可以将数据持久化，并且他比memcached支持更多的数据结构(string,list列表[队列和栈],set[集合],sorted set[有序集合],hash(hash表))。
 
-相关参考文档：http://redisdoc.com/index.html
+相关参考文档：<http://redisdoc.com/index.html>
 
 ### redis使用场景
+
 1. 登录会话存储：存储在 redis 中，与 memcached 相比，数据不会丢失。
 2. 排行版/计数器：比如一些秀场类的项目，经常会有一些前多少名的主播排名。还有一些文章阅读量的技术，或者新浪微博的点赞数等。
 3. 作为消息队列：比如 celery 就是使用 redis 作为中间人。
@@ -749,12 +824,13 @@ redis是一种支持分布式的nosql数据库,他的数据是保存在内存中
 8. 发布和订阅功能：可以用来做聊天软件。
 
 ## redis和memcached的比较
-memcached	redis
-类型    	纯内存数据库	  内存磁盘同步数据库
-数据类型	在定义 value 时就要固定数据类型	不需要
-虚拟内存	不支持	支持
-过期策略	支持	支持
-存储数据安全	不支持	可以将数据同步到 dump.db 中
-灾难恢复	不支持	可以将磁盘中的数据恢复到内存中
-分布式	支持	主从同步
-订阅与发布	不支持	支持
+
+memcached redis
+类型     纯内存数据库   内存磁盘同步数据库
+数据类型 在定义 value 时就要固定数据类型 不需要
+虚拟内存 不支持 支持
+过期策略 支持 支持
+存储数据安全 不支持 可以将数据同步到 dump.db 中
+灾难恢复 不支持 可以将磁盘中的数据恢复到内存中
+分布式 支持 主从同步
+订阅与发布 不支持 支持

@@ -32,13 +32,13 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
 conda config --set show_channel_urls yes
 ```
 
-- 官网源
+## 包管理命令
 
 ```shell
-conda config --add channels https://pypi.python.org/simple
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ // 添加源
+conda config –-remove channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ // 删除源
+conda config –remove-key channels // 恢复默认源
 ```
-
-## 包管理命令
 
 - conda info // 配置后查看信息
 - conda install matplot // 安装

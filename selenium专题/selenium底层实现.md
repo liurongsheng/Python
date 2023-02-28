@@ -1,4 +1,4 @@
-http://selenium-release.storage.googleapis.com/index.html?path=3.141/
+<http://selenium-release.storage.googleapis.com/index.html?path=3.141/>
 
 下载 jar 包 selenium-server-standalone-3.141.59
 
@@ -13,10 +13,9 @@ C:\>java -jar selenium-server-standalone-3.141.59.jar
 00:08:59.942 INFO [WebDriverServlet.<init>] - Initialising WebDriverServlet
 00:09:00.344 INFO [SeleniumServer.boot] - Selenium Server is up and running on port 4444
 
-网页地址访问 http://localhost:4444/ 点击 console 来到管理中心 http://localhost:4444/wd/hub/static/resource/hub.html
+网页地址访问 <http://localhost:4444/> 点击 console 来到管理中心 <http://localhost:4444/wd/hub/static/resource/hub.html>
 
 Create Session --》 Load Script
-
 
 import requests
 import json

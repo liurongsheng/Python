@@ -35,5 +35,4 @@ C:.
             settings.cpython-37.pyc
             __init__.cpython-37.pyc
 
-
 C:\gitHub\ScrapyDemo>
