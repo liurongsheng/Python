@@ -8,17 +8,20 @@ whisper 目录下 [medium.pt]
 
 ## 运行问题
 
-Please install `ffmpeg` in your system to use non-WAV audio file formats and make sure `ffprobe` is in your PATH
+`Please install `ffmpeg` in your system to use non-WAV audio file formats and make sure `ffprobe` is in your PATH`
 
-下载[ffmpeg](https://www.gyan.dev/ffmpeg/builds/)
+下载 ffmpeg
 
-请点击 `release builds` 链接，然后下载 `ffmpeg-release-full.7z` 文件
+路径一：[ffmpeg](https://www.gyan.dev/ffmpeg/builds/) 点击 `release builds` 链接，然后下载 `ffmpeg-release-full.7z` 文件
+
+路径二：[ffmpeg.org](https://ffmpeg.org/download.html)
 
 解压 `D:\Program Files\ffmpeg\bin` 添加到环境 `Path`
 
 ## 使用 GPU 加速
 
 查看安装的包
+
 ```py
 import torch
 print(torch.cuda.is_available())
