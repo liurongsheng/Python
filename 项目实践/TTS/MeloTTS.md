@@ -11,3 +11,5 @@ pip install -r requirements.txt
 pip install -e .
 
 `python -m unidic download` // 需要代理
+
+python melo/app.py
